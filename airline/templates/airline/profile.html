@@ -1,0 +1,91 @@
+{% extends 'airline/base.html' %}
+
+{% block content %}
+
+<div style="padding: 2rem 0; max-width: 800px; margin: 0 auto;">
+
+  <!-- Profile header -->
+  <div style="background: #0C447C; border-radius: 12px; padding: 1.5rem 2rem; display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+    <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 500; color: white; flex-shrink: 0;">
+      {{ request.user.username|first|upper }}
+    </div>
+    <div>
+      <div style="font-size: 18px; font-weight: 500; color: white;">{{ request.user.username }}</div>
+      <div style="font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 2px;">Passenger account</div>
+    </div>
+  </div>
+
+  <!-- Section title -->
+  <div style="font-size: 11px; font-weight: 500; color: #888; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1rem;">My bookings</div>
+
+  {% if bookings %}
+
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      {% for booking in bookings %}
+      <div style="background: #fff; border: 0.5px solid #e0e0e0; border-radius: 12px; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+
+        <!-- Airline -->
+        <div style="min-width: 120px;">
+          <div style="font-size: 11px; font-weight: 500; color: #888; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;">Airline</div>
+          <div style="font-size: 14px; font-weight: 500;">{{ booking.flight.airline_name }}</div>
+        </div>
+
+        <!-- Route -->
+        <div style="flex: 1; min-width: 160px;">
+          <div style="font-size: 11px; font-weight: 500; color: #888; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;">Route</div>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500;">
+            <span>{{ booking.flight.source }}</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 12h14M13 6l6 6-6 6" stroke="#0C447C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>{{ booking.flight.destination }}</span>
+          </div>
+        </div>
+
+        <!-- Seats -->
+        <div style="min-width: 60px;">
+          <div style="font-size: 11px; font-weight: 500; color: #888; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;">Seats</div>
+          <div style="font-size: 14px;">{{ booking.num_seats }}</div>
+        </div>
+
+        <!-- Price -->
+        <div style="min-width: 80px;">
+          <div style="font-size: 11px; font-weight: 500; color: #888; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;">Total</div>
+          <div style="font-size: 15px; font-weight: 500; color: #0C447C;">₹{{ booking.total_price }}</div>
+        </div>
+
+        <!-- Date -->
+        <div style="min-width: 100px;">
+          <div style="font-size: 11px; font-weight: 500; color: #888; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;">Date</div>
+          <div style="font-size: 13px; color: #555;">{{ booking.booking_date }}</div>
+        </div>
+
+        <!-- Status -->
+        <div style="margin-left: auto;">
+          {% if booking.status == "Confirmed" %}
+            <span style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; background: #eaf3de; color: #3b6d11; border-radius: 8px; font-size: 13px; font-weight: 500;">Confirmed</span>
+          {% elif booking.status == "Cancelled" %}
+            <span style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; background: #fdecea; color: #c0392b; border-radius: 8px; font-size: 13px; font-weight: 500;">Cancelled</span>
+          {% else %}
+            <span style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; background: #faeeda; color: #854f0b; border-radius: 8px; font-size: 13px; font-weight: 500;">{{ booking.status }}</span>
+          {% endif %}
+        </div>
+
+      </div>
+      {% endfor %}
+    </div>
+
+  {% else %}
+
+    <div style="text-align: center; padding: 4rem 2rem; border: 0.5px solid #e0e0e0; border-radius: 12px; background: #fff;">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 1rem; opacity: 0.3;">
+        <path d="M21 16v-2l-8-5V3.5A1.5 1.5 0 0 0 11.5 2h0A1.5 1.5 0 0 0 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" stroke="#333" stroke-width="1.5"/>
+      </svg>
+      <p style="font-size: 16px; color: #888; margin: 0;">No bookings yet.</p>
+    </div>
+
+  {% endif %}
+
+</div>
+
+{% endblock %}

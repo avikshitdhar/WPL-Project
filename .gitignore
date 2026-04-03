@@ -1,0 +1,8 @@
+env/
+.venv/
+venv/
+config/__pycache__/
+airline/__pycache__/
+airline/migrations
+db.sqlite3
+*.pyc

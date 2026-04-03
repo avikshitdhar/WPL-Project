@@ -1,0 +1,145 @@
+{% extends 'airline/base.html' %}
+
+{% block content %}
+
+<style>
+  .seat-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border: 0.5px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: #333;
+    background: #fff;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    user-select: none;
+    position: relative;
+  }
+
+  .seat-box input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    margin: 0;
+  }
+
+  .seat-box:has(input:checked) {
+    background: #0C447C;
+    border-color: #0C447C;
+    color: #fff;
+  }
+
+  .seat-box:hover {
+    border-color: #0C447C;
+  }
+
+  /* 🔥 Booked seats */
+  .seat-box.booked {
+    background: #f1f1f1;
+    color: #999;
+    border-color: #ddd;
+    cursor: not-allowed;
+  }
+
+  .seat-box.booked:hover {
+    border-color: #ddd;
+  }
+</style>
+
+<div style="padding: 2rem 0;">
+
+  <!-- Flight summary card -->
+  <div style="background: #fff; border: 0.5px solid #e0e0e0; border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem;">
+    <div style="background: #0C447C; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 10px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M21 16v-2l-8-5V3.5A1.5 1.5 0 0 0 11.5 2h0A1.5 1.5 0 0 0 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="white"/>
+      </svg>
+      <span style="font-size: 16px; font-weight: 500; color: white;">{{ flight.airline_name }}</span>
+    </div>
+
+    <div style="padding: 1rem 1.5rem; display: flex; gap: 2rem; flex-wrap: wrap;">
+      <div>
+        <div style="font-size: 11px; color: #888;">Route</div>
+        <div style="display: flex; gap: 8px; font-size: 15px;">
+          <span>{{ flight.source }}</span> →
+          <span>{{ flight.destination }}</span>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 11px; color: #888;">Available seats</div>
+        <div style="font-size: 15px;">{{ flight.available_seats }}</div>
+      </div>
+    </div>
+  </div>
+
+  {% if error %}
+  <div style="background: #fdecea; border: 0.5px solid #f5c6c6; border-radius: 8px; padding: 0.75rem 1rem; color: #c0392b; margin-bottom: 1.5rem;">
+    {{ error }}
+  </div>
+  {% endif %}
+
+  <!-- Booking form -->
+  <div style="background: #fff; border: 0.5px solid #e0e0e0; border-radius: 12px; padding: 1.5rem;">
+    <form method="POST">
+      {% csrf_token %}
+
+      <div style="font-size: 11px; color: #888; margin-bottom: 0.75rem;">Select seats</div>
+
+      <!-- 🔥 LEGEND -->
+      <div style="margin-bottom: 1rem; font-size: 13px;">
+        <span style="display:inline-block;width:14px;height:14px;background:#fff;border:1px solid #ccc;margin-right:6px;"></span> Available
+        &nbsp;&nbsp;
+        <span style="display:inline-block;width:14px;height:14px;background:#0C447C;margin-right:6px;"></span> Selected
+        &nbsp;&nbsp;
+        <span style="display:inline-block;width:14px;height:14px;background:#f1f1f1;margin-right:6px;"></span> Booked
+      </div>
+
+      <!-- Seats -->
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1.75rem;">
+        {% for seat in seats %}
+        <label class="seat-box {% if seat.is_booked %}booked{% endif %}">
+          
+          {% if seat.is_booked %}
+            <input type="checkbox" disabled>
+          {% else %}
+            <input type="checkbox" name="seats" value="{{ seat.id }}">
+          {% endif %}
+
+          {{ seat.seat_number }}
+
+        </label>
+        {% endfor %}
+      </div>
+
+      <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+        <span id="seat-count">0 seat(s) selected</span>
+
+        <button type="submit" style="background: #0C447C; color: white; padding: 10px 20px; border-radius: 8px;">
+          Proceed to payment
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>
+
+<script>
+  const checkboxes = document.querySelectorAll('input[name="seats"]');
+  const countEl = document.getElementById('seat-count');
+
+  checkboxes.forEach(cb => cb.addEventListener('change', () => {
+    const n = document.querySelectorAll('input[name="seats"]:checked').length;
+    countEl.textContent = n + ' seat' + (n !== 1 ? 's' : '') + ' selected';
+  }));
+</script>
+
+{% endblock %}

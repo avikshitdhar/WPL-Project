@@ -1,0 +1,107 @@
+{% extends 'airline/base.html' %}
+
+{% block content %}
+
+<style>
+  .seats-low { color: #c0392b; }
+  .seats-ok  { color: #333; }
+</style>
+
+<div style="padding: 2rem 0;">
+
+  {% if flights %}
+
+    <div style="margin-bottom: 1.25rem; display: flex; align-items: baseline; gap: 10px;">
+      <span style="font-size: 20px; font-weight: 500; letter-spacing: -0.3px;">Available Flights</span>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      {% for flight in flights %}
+      <div style="background: #fff; border: 0.5px solid #e0e0e0; border-radius: 12px; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+
+        <!-- Airline -->
+        <div style="min-width: 120px;">
+          <div style="font-size: 11px; font-weight: 500; color: #888; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;">Airline</div>
+          <div style="font-size: 15px; font-weight: 500;">{{ flight.airline_name }}</div>
+        </div>
+
+        <!-- Route + Times -->
+        <div style="flex: 1; min-width: 260px;">
+          <div style="font-size: 11px; font-weight: 500; color: #888; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px;">Route</div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+
+            <!-- Departure -->
+            <div style="text-align: center;">
+              <div style="font-size: 16px; font-weight: 500; letter-spacing: -0.3px;">{{ flight.source }}</div>
+              <div style="font-size: 12px; color: #0C447C; font-weight: 500; margin-top: 2px;">{{ flight.departure_time|date:"H:i" }}</div>
+              <div style="font-size: 11px; color: #aaa; margin-top: 1px;">{{ flight.departure_time|date:"d M" }}</div>
+            </div>
+
+            <!-- Arrow -->
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 60px;">
+              <svg width="100%" height="12" viewBox="0 0 80 12" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                <line x1="0" y1="6" x2="72" y2="6" stroke="#ddd" stroke-width="1.5"/>
+                <path d="M68 2l6 4-6 4" stroke="#0C447C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <div style="font-size: 10px; color: #aaa; letter-spacing: 0.04em;">{{ flight.date }}</div>
+            </div>
+
+            <!-- Arrival -->
+            <div style="text-align: center;">
+              <div style="font-size: 16px; font-weight: 500; letter-spacing: -0.3px;">{{ flight.destination }}</div>
+              <div style="font-size: 12px; color: #0C447C; font-weight: 500; margin-top: 2px;">{{ flight.arrival_time|date:"H:i" }}</div>
+              <div style="font-size: 11px; color: #aaa; margin-top: 1px;">{{ flight.arrival_time|date:"d M" }}</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Price -->
+        <div style="min-width: 80px;">
+          <div style="font-size: 11px; font-weight: 500; color: #888; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;">Price</div>
+          <div style="font-size: 16px; font-weight: 500; color: #0C447C;">₹{{ flight.price }}</div>
+        </div>
+
+        <!-- Seats -->
+        <div style="min-width: 60px;">
+          <div style="font-size: 11px; font-weight: 500; color: #888; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;">Seats</div>
+          {% if flight.available_seats < 5 %}
+            <div class="seats-low" style="font-size: 14px;">{{ flight.available_seats }}</div>
+          {% else %}
+            <div class="seats-ok" style="font-size: 14px;">{{ flight.available_seats }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Action -->
+        <div style="margin-left: auto;">
+          {% if flight.departure_time > now %}
+            <a href="{% url 'book_flight' flight.id %}" style="display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 1.25rem; background: #0C447C; color: white; border-radius: 8px; font-size: 14px; font-weight: 500; text-decoration: none; white-space: nowrap;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 12V22H4V12M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Book
+            </a>
+          {% else %}
+            <span style="display: inline-flex; align-items: center; height: 38px; padding: 0 1rem; background: #fdecea; color: #c0392b; border-radius: 8px; font-size: 13px; font-weight: 500;">
+              Departed
+            </span>
+          {% endif %}
+        </div>
+
+      </div>
+      {% endfor %}
+    </div>
+
+  {% else %}
+    <div style="text-align: center; padding: 4rem 2rem; border: 0.5px solid #e0e0e0; border-radius: 12px; background: #fff;">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 1rem; opacity: 0.3;">
+        <circle cx="11" cy="11" r="8" stroke="#333" stroke-width="1.5"/>
+        <path d="m21 21-4.35-4.35" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <p style="font-size: 16px; color: #888; margin: 0;">No flights found for your search.</p>
+    </div>
+  {% endif %}
+
+</div>
+
+{% endblock %}

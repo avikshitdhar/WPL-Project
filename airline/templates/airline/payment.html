@@ -1,0 +1,14 @@
+{% extends 'airline/base.html' %}
+
+{% block content %}
+
+<h2>Payment Page</h2>
+
+<p>Total Amount: ₹{{ booking.total_price }}</p>
+
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-success">Pay Now</button>
+</form>
+
+{% endblock %}

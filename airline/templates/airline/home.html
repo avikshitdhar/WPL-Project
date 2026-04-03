@@ -1,0 +1,111 @@
+{% extends 'airline/base.html' %}
+
+{% block content %}
+
+<div style="padding: 2rem 0;">
+  <div style="background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden;">
+
+    <div style="background: #0C447C; padding: 2rem 2rem 1.5rem;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M21 16v-2l-8-5V3.5A1.5 1.5 0 0 0 11.5 2h0A1.5 1.5 0 0 0 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="white" fill-opacity="0.9"/>
+        </svg>
+        <span style="font-size: 20px; font-weight: 500; color: white;">Find your flight</span>
+      </div>
+      <p style="font-size: 13px; color: rgba(255,255,255,0.65); margin: 0;">
+        Search available routes and compare fares
+      </p>
+    </div>
+
+    <form method="GET" action="{% url 'search_results' %}" style="padding: 1.75rem 2rem 2rem;">
+
+      <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; margin-bottom: 1.5rem; align-items: end;">
+
+        <div>
+          <label style="font-size: 11px;">From</label>
+          {{ form.source }}
+        </div>
+
+        <div style="padding-bottom: 8px;">
+          ↕
+        </div>
+
+        <div>
+          <label style="font-size: 11px;">To</label>
+          {{ form.destination }}
+        </div>
+
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 1.75rem;">
+
+        <div>
+          <label style="font-size: 11px;">Date</label>
+          {{ form.date }}
+
+          <!-- 🔥 ERROR DISPLAY -->
+          {% if form.date.errors %}
+            <div style="color: red; font-size: 12px; margin-top: 4px;">
+              {{ form.date.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div>
+          <label style="font-size: 11px;">Sort by</label>
+          {{ form.sort_by }}
+        </div>
+
+      </div>
+        {% if form.non_field_errors %}
+        <div style="color: red; font-size: 13px; margin-bottom: 1rem;">
+            {{ form.non_field_errors.0 }}
+        </div>
+        {% endif %}
+
+      <button type="submit" style="width: 100%; height: 44px; background: #0C447C; border: none; border-radius: 8px; color: white;">
+        Search flights
+      </button>
+
+    </form>
+  </div>
+</div>
+
+<!-- 🔥 DATE LIMIT SCRIPT -->
+<script>
+  const dateInput = document.querySelector('input[type="date"]');
+
+  if (dateInput) {
+    const today = new Date().toISOString().split('T')[0];
+
+    let maxDate = new Date();
+    maxDate.setMonth(maxDate.getMonth() + 3);
+    maxDate = maxDate.toISOString().split('T')[0];
+
+    dateInput.setAttribute('min', today);
+    dateInput.setAttribute('max', maxDate);
+  }
+</script>
+<script>
+  const sourceSelect = document.querySelector('select[name="source"]');
+  const destinationSelect = document.querySelector('select[name="destination"]');
+
+  function updateDestinationOptions() {
+    const selectedSource = sourceSelect.value;
+
+    Array.from(destinationSelect.options).forEach(option => {
+      if (option.value === selectedSource) {
+        option.disabled = true;
+      } else {
+        option.disabled = false;
+      }
+    });
+  }
+
+  sourceSelect.addEventListener('change', updateDestinationOptions);
+
+  // Run once on load
+  updateDestinationOptions();
+</script>
+
+{% endblock %}
