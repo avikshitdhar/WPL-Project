@@ -43,7 +43,6 @@
           <label style="font-size: 11px;">Date</label>
           {{ form.date }}
 
-          <!-- 🔥 ERROR DISPLAY -->
           {% if form.date.errors %}
             <div style="color: red; font-size: 12px; margin-top: 4px;">
               {{ form.date.errors.0 }}
@@ -71,7 +70,6 @@
   </div>
 </div>
 
-<!-- 🔥 DATE LIMIT SCRIPT -->
 <script>
   const dateInput = document.querySelector('input[type="date"]');
 
@@ -104,7 +102,6 @@
 
   sourceSelect.addEventListener('change', updateDestinationOptions);
 
-  // Run once on load
   updateDestinationOptions();
 </script>
 

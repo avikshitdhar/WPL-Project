@@ -1,13 +1,10 @@
-# from django.db import models
 
-# # Create your models here.
 from django.db import models
 from django.contrib.auth.models import User
 import string
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-# ✈️ Flight Model
 class Flight(models.Model):
     airline_name = models.CharField(max_length=100)
     source = models.CharField(max_length=100)
@@ -33,7 +30,6 @@ class Flight(models.Model):
         return f"{self.airline_name} | {self.source} → {self.destination} | {self.date}"
 
 
-# 🎟️ Booking Model
 class Booking(models.Model):
     STATUS_CHOICES = [
         ('CONFIRMED', 'Confirmed'),
@@ -55,7 +51,6 @@ class Booking(models.Model):
         return f"Booking {self.id} | {self.user.username} | {self.flight}"
 
 
-# 👤 Profile Model (optional but useful)
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
@@ -74,8 +69,8 @@ class Seat(models.Model):
         return f"{self.flight.id} - {self.seat_number}"
     
 def generate_seats(flight):
-    rows = list(string.ascii_uppercase)  # A, B, C...
-    seats_per_row = 6  # A1–A6 typical
+    rows = list(string.ascii_uppercase)  
+    seats_per_row = 6 
 
     total = flight.total_seats
     count = 0

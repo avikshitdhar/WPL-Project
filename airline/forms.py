@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from .models import Flight
 
 class SignupForm(UserCreationForm):
     email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={
@@ -18,12 +19,8 @@ class SignupForm(UserCreationForm):
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
 
-from django import forms
-from .models import Flight
-
 class FlightSearchForm(forms.Form):
 
-    # 🔥 Dynamically get city choices
     CITY_CHOICES = []
 
     source = forms.ChoiceField(
@@ -53,7 +50,6 @@ class FlightSearchForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # 🔥 Get unique cities from DB
         sources = Flight.objects.values_list('source', flat=True).distinct()
         destinations = Flight.objects.values_list('destination', flat=True).distinct()
 
@@ -64,7 +60,6 @@ class FlightSearchForm(forms.Form):
         self.fields['source'].choices = choices
         self.fields['destination'].choices = choices
 
-    # 🔥 Prevent same source & destination
     def clean(self):
         cleaned_data = super().clean()
         source = cleaned_data.get('source')
@@ -74,6 +69,7 @@ class FlightSearchForm(forms.Form):
             raise forms.ValidationError("Source and destination cannot be the same.")
 
         return cleaned_data
+    
 class BookingForm(forms.Form):
     num_seats = forms.IntegerField(
         min_value=1,

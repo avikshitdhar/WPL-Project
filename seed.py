@@ -3,7 +3,6 @@ import django
 import random
 from datetime import datetime, timedelta
 
-# 🔧 Setup Django environment
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
@@ -12,14 +11,14 @@ from airline.models import Flight
 cities = ["Mumbai", "Delhi", "Bangalore", "Chennai", "Hyderabad", "Kolkata"]
 airlines = ["IndiGo", "Air India", "SpiceJet", "Vistara"]
 
-for i in range(50):
+for i in range(1500):
     source = random.choice(cities)
     destination = random.choice([c for c in cities if c != source])
 
-    date = datetime.now().date() + timedelta(days=random.randint(0, 60))
+    date = datetime.now().date() + timedelta(days=random.randint(0, 2))
 
     departure_time = datetime.now() + timedelta(
-        days=random.randint(0, 60),
+        days=random.randint(0, 2),
         hours=random.randint(0, 23)
     )
 
@@ -39,4 +38,4 @@ for i in range(50):
         price=random.randint(3000, 12000)
     )
 
-print("✅ Flights added successfully!")
+print("Flights added successfully!")

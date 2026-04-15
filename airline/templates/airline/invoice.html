@@ -4,7 +4,6 @@
 
 <div style="padding: 2rem 0; max-width: 600px; margin: 0 auto;">
 
-  <!-- Header -->
   <div style="background: #0C447C; border-radius: 12px 12px 0 0; padding: 1.5rem 2rem; display: flex; align-items: center; justify-content: space-between;">
     <div style="display: flex; align-items: center; gap: 10px;">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -15,10 +14,8 @@
     <span style="background: rgba(255,255,255,0.15); color: white; font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 6px; letter-spacing: 0.04em;">#{{ booking.id }}</span>
   </div>
 
-  <!-- Body -->
   <div style="background: #fff; border: 0.5px solid #e0e0e0; border-top: none; border-radius: 0 0 12px 12px; padding: 1.75rem 2rem;">
 
-    <!-- Route -->
     <div style="display: flex; align-items: center; justify-content: center; gap: 1.5rem; padding: 1rem 0 1.5rem; border-bottom: 0.5px solid #e0e0e0; margin-bottom: 1.5rem;">
       <div style="text-align: center;">
         <div style="font-size: 22px; font-weight: 500; letter-spacing: -0.5px;">{{ booking.flight.source }}</div>
@@ -33,7 +30,6 @@
       </div>
     </div>
 
-    <!-- Details grid -->
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem;">
 
       <div>
@@ -58,13 +54,11 @@
 
     </div>
 
-    <!-- Total -->
     <div style="display: flex; align-items: center; justify-content: space-between; background: #f0f4f9; border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1.75rem;">
       <span style="font-size: 13px; font-weight: 500; color: #555; text-transform: uppercase; letter-spacing: 0.06em;">Total paid</span>
       <span style="font-size: 22px; font-weight: 500; color: #0C447C;">₹{{ booking.total_price }}</span>
     </div>
 
-    <!-- Action -->
     <a href="/" style="display: flex; align-items: center; justify-content: center; gap: 8px; height: 44px; background: #0C447C; color: white; border-radius: 8px; font-size: 15px; font-weight: 500; text-decoration: none;">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M3 12l9-9 9 9M5 10v9a1 1 0 0 0 1 1h4v-4h4v4h4a1 1 0 0 0 1-1v-9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

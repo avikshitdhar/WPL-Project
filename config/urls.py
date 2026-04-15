@@ -28,7 +28,7 @@ def root_redirect(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('', root_redirect),  # root handler
+    path('', root_redirect),  
 
     path('', include('airline.urls')),
 
